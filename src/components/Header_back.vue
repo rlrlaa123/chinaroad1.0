@@ -1,6 +1,6 @@
 <template>
   <header>
-    <router-link :to="{ name: 'Conversation' }"><img src="../assets/back.png"></router-link>
+    <a @click="back()"><img src="../assets/back.png"></a>
     <span class="header-name">{{ headerName}}</span>
     <span></span>
   </header>
@@ -8,7 +8,12 @@
 
 <script>
 export default {
-  props: ['headerName'],
+  props: ['headerName', 'tag'],
+  methods: {
+    back() {
+      this.$router.go(-1);
+    },
+  },
 };
 </script>
 

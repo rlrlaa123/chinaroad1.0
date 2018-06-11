@@ -8,8 +8,8 @@
         <span class="level" v-bind:class="{ active : !level }" @click="toggleLevel">중급</span>
       </div>
     </section>
-    <div id="content">
-      <div v-for="category in categories" v-bind:key="category.id">
+    <div class="content" v-if="level">
+      <div v-for="category in easy_categories" v-bind:key="category.id">
           <div>
             <router-link :to="{ name: 'List', params: { categoryId: category.id }}">
               <img :src=category.img class="category-img">
@@ -17,6 +17,17 @@
           </div>
           <img src="../../assets/video.png" class="play-btn">
           <p>{{ category.name }}</p>
+      </div>
+    </div>
+    <div class="content" v-else>
+      <div v-for="category in hard_categories" v-bind:key="category.id">
+        <div>
+          <router-link :to="{ name: 'List', params: { categoryId: category.id }}">
+            <img :src=category.img class="category-img">
+          </router-link>
+        </div>
+        <img src="../../assets/video.png" class="play-btn">
+        <p>{{ category.name }}</p>
       </div>
     </div>
     <modal v-if="showModal" @close="showModal = false"></modal>
@@ -36,7 +47,7 @@ export default {
   },
   data() {
     return {
-      categories: [
+      easy_categories: [
         {
           id: 1,
           name: '카페에서 주문하기',
@@ -52,6 +63,14 @@ export default {
         {
           id: 3,
           name: '공항에서 이야기하기',
+          // eslint-disable-next-line
+          img: require('../../assets/people/003.jpg'),
+        },
+      ],
+      hard_categories: [
+        {
+          id: 4,
+          name: '카페에서 주문하기',
           // eslint-disable-next-line
           img: require('../../assets/people/003.jpg'),
         },
@@ -98,7 +117,7 @@ export default {
     margin: 0 5px;
   }
 
-  #content {
+  .content {
     display: grid;
     grid-template-columns: repeat(2,1fr);
     grid-template-rows: repeat(5,200px);
@@ -107,7 +126,7 @@ export default {
     margin: 0 auto;
   }
 
-  #content div {
+  .content div {
     border-radius: 5px;
     box-shadow: 2px 3px 3px 2px rgba(0,0,0,0.08);
     display: grid;

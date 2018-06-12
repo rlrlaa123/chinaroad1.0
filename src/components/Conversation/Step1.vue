@@ -1,17 +1,13 @@
 <template>
   <div>
     <headers v-bind:header-name="header" v-bind:tag="1"></headers>
+    <div style="margin: 20px 20px 0 20px;">
+      <step step1=true></step>
+    </div>
     <video controls="controls">
       <source :src="conversation.video" type='video/mp4'>
     </video>
     <h1>{{ conversation.title }}</h1>
-    <div class="step-wrapper">
-      <span>STEP 1</span>
-      <span>></span>
-      <span>STEP 2</span>
-      <span>></span>
-      <span>STEP 3</span>
-    </div>
     <div class="conversation-header">
       <div class="dialog">Dialog</div>
       <span class="language">한국어</span>
@@ -50,10 +46,12 @@
 
 <script>
 import Headers from '../Header_back';
+import Step from './Step_selector';
 
 export default {
   components: {
     Headers,
+    Step,
   },
   data() {
     return {
@@ -62,32 +60,50 @@ export default {
         id: 1,
         title: '你好!',
         // eslint-disable-next-line
+        image: require('../../assets/people/08.png'),
+        // eslint-disable-next-line
         video: require('../../assets/video/sample01.mp4'),
         sentences: [
           {
             id: 1,
             A: {
               chinese_c: '你好，‘小龙’, 周末过得好吗？',
+              chinese_c_hidden: '',
               chinese_e: 'nǐ hǎo，‘xiǎo lóng’, zhōu mò guò de hǎo ma？',
               korean: '안녕, “小龙”. 주말은 잘 보냈니?',
+              // eslint-disable-next-line
+              audio: require('../../assets/audio/sound_sample.mp3'),
+              hidden: true,
             },
             B: {
               chinese_c: '嗯，过得很好，你呢？',
+              chinese_c_hidden: '',
               chinese_e: 'èng， guòde hěn hǎo，nǐ ne？',
               korean: '응, 잘 보냈어. 너는 주말 잘 보냈어?',
+              // eslint-disable-next-line
+              audio: require('../../assets/audio/sound_sample.mp3'),
+              hidden: true,
             },
           },
           {
             id: 2,
             A: {
               chinese_c: '我也过得很好，谢谢你的关心。',
+              chinese_c_hidden: '',
               chinese_e: '',
               korean: '나도 정말 좋았어. 물어봐 줘서 고마워.',
+              // eslint-disable-next-line
+              audio: require('../../assets/audio/sound_sample.mp3'),
+              hidden: true,
             },
             B: {
               chinese_c: '小龙’, 周末过得好吗',
+              chinese_c_hidden: '',
               chinese_e: 'èng， guòde hěn hǎo，nǐ ne？',
               korean: '아자아자 화이팅',
+              // eslint-disable-next-line
+              audio: require('../../assets/audio/sound_sample.mp3'),
+              hidden: true,
             },
           },
         ],
@@ -101,22 +117,6 @@ export default {
   video {
     width: 100%;
     height: 235px;
-  }
-
-  .step-wrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 50px;
-    border-top: 1px solid #e3e3e3;
-    border-bottom: 1px solid #e3e3e3;
-    margin:  100px 25px 0 25px;
-    color: #dddddd;
-    font-size: 20px;
-  }
-
-  .step-wrapper span:nth-child(1) {
-    color: #c21720;
   }
 
   .conversation-header {

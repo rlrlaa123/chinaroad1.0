@@ -1,18 +1,18 @@
 <template>
   <div>
     <headers v-bind:headerName=header></headers>
-    <div class="category-wrapper" v-for="conversation in conversations"
-         v-bind:key="conversation.id">
-      <router-link :to="{ name: 'Step1', params: { categoryId: 1, stepId: conversation.id } }">
-        <div class="category-container">
-          <h2 style="display: inline-block;">{{ conversation.id }}. {{ conversation.name}}</h2>
+    <div class="list-wrapper" v-for="list in lists"
+         v-bind:key="list.id">
+      <router-link :to="{ name: 'Step1', params: { categoryId: 1, stepId: list.id } }">
+        <div class="list-container">
+          <h2 style="display: inline-block;">{{ list.id }}. {{ list.name}}</h2>
           <div class="video-button">1 video</div>
         </div>
-        <div class="category-image-container">
-          <div class="category-image"
-               v-bind:style="{ backgroundImage: 'url(' + conversation.img + ')' }">
+        <div class="list-image-container">
+          <div class="list-image"
+               v-bind:style="{ backgroundImage: 'url(' + list.img + ')' }">
           </div>
-          <p>{{ conversation.name }}</p>
+          <p>{{ list.name }}</p>
         </div>
       </router-link>
     </div>
@@ -29,24 +29,30 @@ export default {
   data() {
     return {
       header: '카페에서 주문하기',
-      conversations: [
+      lists: [
         {
           id: 1,
           name: '카페에서 주문하기',
           // eslint-disable-next-line
           img: require('../../assets/people/03.png'),
+          conversation: [
+            {
+              id: 1,
+              name: '카페에서 주문하기',
+            },
+          ],
         },
         {
           id: 2,
-          name: '카페에서 주문하기',
+          name: '거스름돈 계산하기',
           // eslint-disable-next-line
-          img: require('../../assets/people/03.png'),
+          img: require('../../assets/people/001.jpg'),
         },
         {
           id: 3,
-          name: '카페에서 주문하기',
+          name: '리필하기',
           // eslint-disable-next-line
-          img: require('../../assets/people/03.png'),
+          img: require('../../assets/people/002.jpg'),
         },
       ],
     };
@@ -55,7 +61,7 @@ export default {
 </script>
 
 <style scoped>
-  .category-container {
+  .list-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -75,13 +81,13 @@ export default {
     border-radius: 10px;
   }
 
-  .category-image-container {
+  .list-image-container {
     width: 60%;
     height: 150px;
     margin: auto;
     box-shadow: 2px 3px 3px 2px rgba(0,0,0,0.08);
   }
-  .category-image{
+  .list-image{
     width: 100%;
     height: 100px;
     margin: auto;
@@ -89,7 +95,7 @@ export default {
     background-size: cover;
   }
 
-  .category-image-container p {
+  .list-image-container p {
     font-size: 15px;
     font-weight: normal;
   }

@@ -1,11 +1,13 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Conversation from '../components/Conversation/Conversation';
+import Conversation from '../components/Conversation/Category';
 import List from '../components/Conversation/List';
 import Step1 from '../components/Conversation/Step1';
 import Step2 from '../components/Conversation/Step2';
 import Step3 from '../components/Conversation/Step3';
 import Contents from '../components/Contents/Category';
+import Login from '../components/Login/Login';
+import Agreement from '../components/Login/Agreement';
 
 Vue.use(Router);
 
@@ -13,6 +15,16 @@ export default new Router({
   mode: 'history',
   base: '/',
   routes: [
+    {
+      path: '/login',
+      name: 'Login',
+      component: Login,
+    },
+    {
+      path: '/agreement',
+      name: 'Agreement',
+      component: Agreement,
+    },
     {
       path: '/conversation',
       name: 'Conversation',

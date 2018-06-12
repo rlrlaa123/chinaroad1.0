@@ -6,6 +6,7 @@ import Step1 from '../components/Conversation/Step1';
 import Step2 from '../components/Conversation/Step2';
 import Step3 from '../components/Conversation/Step3';
 import Contents from '../components/Contents/Category';
+import Content from '../components/Contents/Content';
 import Login from '../components/Login/Login';
 import Agreement from '../components/Login/Agreement';
 
@@ -54,6 +55,11 @@ export default new Router({
       path: '/contents',
       name: 'Contents',
       component: Contents,
+    },
+    {
+      path: '/contents/:contentId',
+      name: 'Content',
+      component: Content,
     },
   ],
 });

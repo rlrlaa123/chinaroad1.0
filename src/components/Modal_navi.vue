@@ -8,7 +8,7 @@
         <div class="menu-selector">
           <div><router-link :to="{ name: 'Conversation' }">회화</router-link></div>
           <div><router-link :to="{ name: 'Contents'}">컨텐츠</router-link></div>
-          <div>첨삭</div>
+          <div><router-link :to="{ name: 'Edit'}">첨삭</router-link></div>
         </div>
       </div>
     </div>

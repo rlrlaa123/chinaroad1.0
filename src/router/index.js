@@ -9,6 +9,7 @@ import Contents from '../components/Contents/Category';
 import Content from '../components/Contents/Content';
 import Login from '../components/Login/Login';
 import Agreement from '../components/Login/Agreement';
+import Edit from '../components/Editing/Edit_page';
 
 Vue.use(Router);
 
@@ -60,6 +61,11 @@ export default new Router({
       path: '/contents/:contentId',
       name: 'Content',
       component: Content,
+    },
+    {
+      path: '/edit',
+      name: 'Edit',
+      component: Edit,
     },
   ],
 });

@@ -1,9 +1,8 @@
 <template>
   <div>
     <headers></headers>
-    <section>
-      <navigator @click.native="showModal = true" menuName="컨텐츠"></navigator>
-    </section>
+    <navigator naviName="컨텐츠" :toggle=toggle :menuName=menuName
+               @easy="toggle = true" @hard="toggle = false" @open="showModal = true"></navigator>
     <div class="contents-wrapper">
       <div class="contents-container" v-for="category in categories" v-bind:key="category.id">
         <router-link :to="{ name: 'Content', params: { contentId: category.id } }">
@@ -38,6 +37,8 @@ export default {
   data() {
     return {
       showModal: false,
+      toggle: true,
+      menuName: ['초급', '중급'],
       categories: [
         {
           id: 1,
@@ -56,7 +57,7 @@ export default {
           image: require('../../assets/contents/09.jpg'),
         },
         {
-          id: 2,
+          id: 3,
           name: '사회/문화',
           korean: '< 툭하면 다리 꼬는 당신, 골반 척추도 꼬인다 >',
           chineses: '< 稍不注意，腿会弯曲，骨盆和脊柱也会弯曲 >',

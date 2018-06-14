@@ -1,8 +1,8 @@
 <template>
   <header>
     <a @click="back()"><img src="../assets/back.png"></a>
-    <span class="header-name">{{ headerName}}</span>
-    <span></span>
+    <span class="header-name">{{ headerName }}</span>
+    <span style="width: 25px;"></span>
   </header>
 </template>
 

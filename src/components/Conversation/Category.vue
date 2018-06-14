@@ -1,14 +1,9 @@
 <template>
   <div>
     <headers></headers>
-    <section>
-      <navigator @click.native="showModal = true" menuName="회화"></navigator>
-      <div id="level-wrapper">
-        <span class="level" v-bind:class="{ active : level }" @click="toggleLevel">초급</span>
-        <span class="level" v-bind:class="{ active : !level }" @click="toggleLevel">중급</span>
-      </div>
-    </section>
-    <div class="content" v-if="level">
+    <navigator naviName="회화" :toggle=toggle :menuName=menuName
+               @easy="toggle = true" @hard="toggle = false"></navigator>
+    <div class="content" v-if="toggle">
       <div v-for="category in easy_categories" v-bind:key="category.id">
           <div>
             <router-link :to="{ name: 'List', params: { categoryId: category.id }}">
@@ -30,23 +25,22 @@
         <p>{{ category.name }}</p>
       </div>
     </div>
-    <modal v-if="showModal" @close="showModal = false"></modal>
   </div>
 </template>
 
 <script>
 import Headers from '../Header';
-import Modal from '../Modal_navi';
 import Navigator from '../Navigator';
 
 export default {
   components: {
     Headers,
-    Modal,
     Navigator,
   },
   data() {
     return {
+      toggle: true,
+      menuName: ['초급', '중급'],
       easy_categories: [
         {
           id: 1,
@@ -75,52 +69,18 @@ export default {
           img: require('../../assets/people/003.jpg'),
         },
       ],
-      level: true,
-      showModal: false,
     };
   },
   methods: {
-    toggleLevel() {
-      // 초급 클릭
-      if (this.level) {
-        this.level = false;
-      } else { // 중급 클릭
-        this.level = true;
-      }
-    },
   },
 };
 </script>
 
 <style scoped>
-  section {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 50px;
-    color: #c21720;
-    font-weight: bolder;
-    font-size: 20px;
-    margin-bottom: 10px;
-  }
-
-  #level-wrapper {
-    margin-right: 20px;
-    height: 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    color: rgba(0,0,0,0.3)
-  }
-
-  .level {
-    margin: 0 5px;
-  }
-
   .content {
     display: grid;
-    grid-template-columns: repeat(2,1fr);
-    grid-template-rows: repeat(5,200px);
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 200px repeat(auto-fill ,200px);
     grid-gap: 15px;
     max-width: 150%;
     margin: 0 auto;
@@ -153,9 +113,5 @@ export default {
     height: 40px;
     top: 5px;
     right: 5px;
-  }
-
-  .active {
-    color: #c21720;
   }
 </style>

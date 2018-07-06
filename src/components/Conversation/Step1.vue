@@ -73,6 +73,7 @@ export default {
     return {
       header: '你好!',
       conversation: {},
+      // sampleAudio: require('../../assets/audio/sound_sample.mp3'),
     };
   },
   created() {
@@ -83,8 +84,13 @@ export default {
   },
   methods: {
     playAudio(sound) {
-      if (sound) {
+      if (sound !== axios.defaults.baseURL.substr(0, 22)) {
         const audio = new Audio(sound);
+        audio.play();
+      } else {
+        // eslint-disable-next-line
+        const audioFile = require('../../assets/audio/sound_sample.mp3');
+        const audio = new Audio(audioFile);
         audio.play();
       }
     },

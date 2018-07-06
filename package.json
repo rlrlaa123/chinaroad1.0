@@ -11,10 +11,18 @@
     "e2e": "node test/e2e/runner.js",
     "test": "npm run unit && npm run e2e",
     "lint": "eslint --ext .js,.vue src test/unit test/e2e/specs",
-    "build": "node build/build.js"
+    "build": "node build/build.js",
+    "cordova": "npm run build  && cordova run android "
   },
   "dependencies": {
+    "@nulldreams/vue-loading": "0.0.1",
+    "axios": "^0.18.0",
+    "cordova-android": "^7.0.0",
+    "cordova-plugin-file": "^6.0.1",
+    "cordova-plugin-media": "^5.0.2",
+    "cordova-plugin-whitelist": "1",
     "vue": "^2.5.2",
+    "vue-cordova": "^0.1.2",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"
   },
@@ -82,5 +90,14 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "cordova": {
+    "plugins": {
+      "cordova-plugin-whitelist": {},
+      "cordova-plugin-media": {}
+    },
+    "platforms": [
+      "android"
+    ]
+  }
 }

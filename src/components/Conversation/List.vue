@@ -1,16 +1,17 @@
 <template>
   <div>
     <headers v-bind:headerName=header></headers>
-    <div class="list-wrapper" v-for="list in lists"
+    <div class="list-wrapper" v-for="(list, index) in lists"
          v-bind:key="list.id">
-      <router-link :to="{ name: 'Step1', params: { categoryId: 1, stepId: list.id } }">
+      <router-link :to="{ name: 'Step1',
+       params: { categoryId: $route.params.categoryId, conversationId: list.id } }">
         <div class="list-container">
-          <h2 style="display: inline-block;">{{ list.id }}. {{ list.name}}</h2>
+          <h2 style="display: inline-block;">{{ index+1 }}. {{ list.name }}</h2>
           <div class="video-button">1 video</div>
         </div>
         <div class="list-image-container">
           <div class="list-image"
-               v-bind:style="{ backgroundImage: 'url(' + list.img + ')' }">
+               v-bind:style="{ backgroundImage: 'url(' + list.image1 + ')' }">
           </div>
           <p>{{ list.name }}</p>
         </div>
@@ -20,6 +21,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import Headers from '../Header_back';
 
 export default {
@@ -30,32 +32,42 @@ export default {
     return {
       header: '카페에서 주문하기',
       lists: [
-        {
-          id: 1,
-          name: '카페에서 주문하기',
-          // eslint-disable-next-line
-          img: require('../../assets/people/03.png'),
-          conversation: [
-            {
-              id: 1,
-              name: '카페에서 주문하기',
-            },
-          ],
-        },
-        {
-          id: 2,
-          name: '거스름돈 계산하기',
-          // eslint-disable-next-line
-          img: require('../../assets/people/001.jpg'),
-        },
-        {
-          id: 3,
-          name: '리필하기',
-          // eslint-disable-next-line
-          img: require('../../assets/people/002.jpg'),
-        },
+        // {
+        //   id: 1,
+        //   title: '카페에서 주문하기',
+        //   // eslint-disable-next-line
+        //   img: require('../../assets/people/03.png'),
+        //   conversation: [
+        //     {
+        //       id: 1,
+        //       title: '카페에서 주문하기',
+        //     },
+        //   ],
+        // },
+        // {
+        //   id: 2,
+        //   title: '거스름돈 계산하기',
+        //   // eslint-disable-next-line
+        //   img: require('../../assets/people/001.jpg'),
+        // },
+        // {
+        //   id: 3,
+        //   title: '리필하기',
+        //   // eslint-disable-next-line
+        //   img: require('../../assets/people/002.jpg'),
+        // },
       ],
     };
+  },
+  created() {
+    axios.get(`categories/${this.$route.params.categoryId}`, {
+    }).then((response) => {
+      const conversations = response.data;
+      conversations.map((ele) => {
+        this.lists.push(ele);
+        return 1;
+      });
+    });
   },
 };
 </script>

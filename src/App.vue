@@ -1,12 +1,17 @@
 <template>
   <div id="app">
     <router-view></router-view>
+    <!--<test></test>-->
   </div>
 </template>
 
 <script>
-export default {
+import Test from './components/Test';
 
+export default {
+  components: {
+    Test,
+  },
 };
 </script>
 

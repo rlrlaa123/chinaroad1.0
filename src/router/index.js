@@ -10,13 +10,19 @@ import Content from '../components/Contents/Content';
 import Login from '../components/Login/Login';
 import Agreement from '../components/Login/Agreement';
 import Edit from '../components/Editing/Edit_page';
+import Home from '../components/Home';
 
 Vue.use(Router);
 
 export default new Router({
-  mode: 'history',
+  // mode: 'history',
   base: '/',
   routes: [
+    {
+      path: '/',
+      name: 'Home',
+      component: Home,
+    },
     {
       path: '/login',
       name: 'Login',
@@ -38,17 +44,17 @@ export default new Router({
       component: List,
     },
     {
-      path: '/conversation/:categoryId/:stepId/step1',
+      path: '/conversation/:categoryId/:conversationId/step1',
       name: 'Step1',
       component: Step1,
     },
     {
-      path: '/conversation/:categoryId/:stepId/step2',
+      path: '/conversation/:categoryId/:conversationId/step2',
       name: 'Step2',
       component: Step2,
     },
     {
-      path: '/conversation/:categoryId/:stepId/step3',
+      path: '/conversation/:categoryId/:conversationId/step3',
       name: 'Step3',
       component: Step3,
     },

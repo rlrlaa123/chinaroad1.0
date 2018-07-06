@@ -1,20 +1,20 @@
 <template>
   <div>
-    <headers v-bind:header-name="header" v-bind:tag="1"></headers>
+    <headers v-bind:header-name="header"
+             v-bind:category-i-d="this.$route.params.categoryId"></headers>
     <div style="margin: 20px 20px 0 20px;">
       <step step3=true></step>
     </div>
-    <video controls="controls">
-      <source :src="conversation.video" type='video/mp4'>
-    </video>
+    <video controls="controls" :src="conversation.video2" type='video/mp4'></video>
     <div class="video-btn">
-      <img src="../../assets/microphone.png">
+      <img src="../../assets/microphone.png" @click="recordAudio()">
     </div>
-    <p class="video-text">더빙 시작하기</p>
+    <p class="video-text">{{ recordText }}</p>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
 import Headers from '../Header_back';
 import Step from './Step_selector';
 
@@ -26,59 +26,44 @@ export default {
   data() {
     return {
       header: '你好!',
-      conversation: {
-        id: 1,
-        title: '你好!',
-        // eslint-disable-next-line
-        image: require('../../assets/people/08.png'),
-        // eslint-disable-next-line
-        video: require('../../assets/video/sample01(sound x).mp4'),
-        sentences: [
-          {
-            id: 1,
-            A: {
-              chinese_c: '你好，‘小龙’, 周末过得好吗？',
-              chinese_c_hidden: '',
-              chinese_e: 'nǐ hǎo，‘xiǎo lóng’, zhōu mò guò de hǎo ma？',
-              korean: '안녕, “小龙”. 주말은 잘 보냈니?',
-              // eslint-disable-next-line
-              audio: require('../../assets/audio/sound_sample.mp3'),
-              hidden: true,
-            },
-            B: {
-              chinese_c: '嗯，过得很好，你呢？',
-              chinese_c_hidden: '',
-              chinese_e: 'èng， guòde hěn hǎo，nǐ ne？',
-              korean: '응, 잘 보냈어. 너는 주말 잘 보냈어?',
-              // eslint-disable-next-line
-              audio: require('../../assets/audio/sound_sample.mp3'),
-              hidden: true,
-            },
-          },
-          {
-            id: 2,
-            A: {
-              chinese_c: '我也过得很好，谢谢你的关心。',
-              chinese_c_hidden: '',
-              chinese_e: '',
-              korean: '나도 정말 좋았어. 물어봐 줘서 고마워.',
-              // eslint-disable-next-line
-              audio: require('../../assets/audio/sound_sample.mp3'),
-              hidden: true,
-            },
-            B: {
-              chinese_c: '小龙’, 周末过得好吗',
-              chinese_c_hidden: '',
-              chinese_e: 'èng， guòde hěn hǎo，nǐ ne？',
-              korean: '아자아자 화이팅',
-              // eslint-disable-next-line
-              audio: require('../../assets/audio/sound_sample.mp3'),
-              hidden: true,
-            },
-          },
-        ],
-      },
+      conversation: {},
+      mediaRec: '',
+      recordState: 0,
+      recordText: '마이크를 클릭하여 더빙 시작하기',
     };
+  },
+  created() {
+    // const currentdate = new Date();
+    // const datetime = currentdate.getFullYear().toString()
+    //   + (currentdate.getMonth() + 1).toString()
+    //   + currentdate.getDate().toString()
+    //   + currentdate.getHours().toString()
+    //   + currentdate.getMinutes().toString()
+    //   + currentdate.getSeconds().toString();
+    // this.mediaRec = new Vue.cordova.Media(`${datetime}.mp3`);
+
+    axios.get(`conversations/${this.$route.params.categoryId}/${this.$route.params.conversationId}/step3`, {
+    }).then((response) => {
+      this.conversation = response.data;
+    });
+  },
+  methods: {
+    recordAudio() {
+      if (this.recordState === 0) {
+        document.getElementsByTagName('video')[0].play();
+        // this.mediaRec.startRecord();
+        this.recordText = '녹음중 입니다';
+        this.recordState += 1;
+      } else if (this.recordState === 1) {
+        // this.mediaRec.stopRecord();
+        this.recordText = '녹음된 음성을 들어보시려면 다시 눌러주세요.';
+        this.recordState += 1;
+      } else {
+        this.recordText = '영상과 비교해보세요.';
+        document.getElementsByTagName('video')[0].play();
+        // this.mediaRec.play();
+      }
+    },
   },
 };
 </script>

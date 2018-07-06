@@ -3,22 +3,22 @@
     <headers></headers>
     <navigator naviName="회화" :toggle=toggle :menuName=menuName
                @easy="toggle = true" @hard="toggle = false"></navigator>
-    <div class="content" v-if="toggle">
+    <div class="content" v-show="toggle">
       <div v-for="category in easy_categories" v-bind:key="category.id">
           <div>
             <router-link :to="{ name: 'List', params: { categoryId: category.id }}">
-              <img :src=category.img class="category-img">
+              <img :src=category.image class="category-img">
             </router-link>
           </div>
           <img src="../../assets/video.png" class="play-btn">
           <p>{{ category.name }}</p>
       </div>
     </div>
-    <div class="content" v-else>
+    <div class="content" v-show="!toggle">
       <div v-for="category in hard_categories" v-bind:key="category.id">
         <div>
           <router-link :to="{ name: 'List', params: { categoryId: category.id }}">
-            <img :src=category.img class="category-img">
+            <img :src=category.image class="category-img">
           </router-link>
         </div>
         <img src="../../assets/video.png" class="play-btn">
@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import Headers from '../Header';
 import Navigator from '../Navigator';
 
@@ -41,35 +42,24 @@ export default {
     return {
       toggle: true,
       menuName: ['초급', '중급'],
-      easy_categories: [
-        {
-          id: 1,
-          name: '카페에서 주문하기',
-          // eslint-disable-next-line
-          img: require('../../assets/people/003.jpg'),
-        },
-        {
-          id: 2,
-          name: '일반 회화 연습',
-          // eslint-disable-next-line
-          img: require('../../assets/people/003.jpg'),
-        },
-        {
-          id: 3,
-          name: '공항에서 이야기하기',
-          // eslint-disable-next-line
-          img: require('../../assets/people/003.jpg'),
-        },
-      ],
-      hard_categories: [
-        {
-          id: 4,
-          name: '카페에서 주문하기',
-          // eslint-disable-next-line
-          img: require('../../assets/people/003.jpg'),
-        },
-      ],
+      easy_categories: [],
+      hard_categories: [],
     };
+  },
+  created() {
+    axios.get('categories', {
+    }).then((response) => {
+      const categories = response.data;
+      categories.map((ele) => {
+        if (ele.level === 'easy') {
+          this.easy_categories.push(ele);
+        } else {
+          this.hard_categories.push(ele);
+        }
+        return 1;
+      });
+    }).catch(() => {
+    });
   },
   methods: {
   },

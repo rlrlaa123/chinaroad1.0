@@ -1,16 +1,36 @@
 <template>
   <header>
-    <img src="../assets/setting.png" id="setting-btn">
+    <img src="../assets/setting.png" id="setting-btn" @click="naviOpen">
     <div style="display: flex; align-items: center; justify-content: center;">
       <img src="../assets/grid2_gray.png" id="grid-btn1">
       <img src="../assets/grid4_red.png" id="grid-btn2">
     </div>
     <div style="width: 35px;"></div>
+    <nav-bar v-if="navi" @close="navi=false"></nav-bar>
   </header>
 </template>
 
 <script>
+import NavBar from './NavBar';
+
 export default {
+  components: {
+    NavBar,
+  },
+  data() {
+    return {
+      navi: false,
+    };
+  },
+  methods: {
+    naviOpen() {
+      if (this.navi) {
+        this.navi = false;
+      } else {
+        this.navi = true;
+      }
+    },
+  },
 };
 </script>
 

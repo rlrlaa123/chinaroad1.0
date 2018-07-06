@@ -1,18 +1,33 @@
 <template>
   <div>
-    <headers v-bind:header-name="header" v-bind:tag="1"></headers>
+    <headers v-bind:header-name="header"
+             v-bind:category-i-d="this.$route.params.categoryId"></headers>
     <div style="margin: 20px 20px 0 20px;">
       <step step1=true></step>
     </div>
-    <video controls="controls">
-      <source :src="conversation.video" type='video/mp4'>
-    </video>
-    <h1>{{ conversation.title }}</h1>
+    <video controls="controls" :src="conversation.video1" type="video/mp4"></video>
+    <h1>{{ conversation.name }}</h1>
     <div class="conversation-header">
       <div class="dialog">Dialog</div>
       <span class="language">한국어</span>
     </div>
-    <div class="conversation-box">
+    <div class="conversation-box" v-for="counter in 10" v-bind:key="counter">
+      <div class="conversation-wrapper">
+        <div class="conversation-container" v-if="conversation['korean' + counter]">
+          <span class="conversation-step">{{ counter %2 === 0 ? 'B' : 'A'}}</span>
+          <div class="conversation-sentence">
+            <p>{{ conversation['chinese_c' + counter] }}</p>
+            <p class="lighter">{{ conversation['chinese_e' + counter] }}</p>
+            <p>{{ conversation['korean' + counter] }}</p>
+          </div>
+          <div class="conversation-button">
+            <img src="../../assets/sound.png"
+                 @click.prevent="playAudio(conversation['audio' + counter])">
+            <img src="../../assets/change.png"
+                 @click.prevent="repeatAudio(conversation['audio' + counter])">
+          </div>
+        </div>
+      </div>
       <div class="conversation-wrapper" v-for="sentence in conversation.sentences"
            v-bind:key="sentence.id">
         <div class="conversation-container">
@@ -45,6 +60,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import Headers from '../Header_back';
 import Step from './Step_selector';
 
@@ -56,59 +72,28 @@ export default {
   data() {
     return {
       header: '你好!',
-      conversation: {
-        id: 1,
-        title: '你好!',
-        // eslint-disable-next-line
-        image: require('../../assets/people/08.png'),
-        // eslint-disable-next-line
-        video: require('../../assets/video/sample01.mp4'),
-        sentences: [
-          {
-            id: 1,
-            A: {
-              chinese_c: '你好，‘小龙’, 周末过得好吗？',
-              chinese_c_hidden: '',
-              chinese_e: 'nǐ hǎo，‘xiǎo lóng’, zhōu mò guò de hǎo ma？',
-              korean: '안녕, “小龙”. 주말은 잘 보냈니?',
-              // eslint-disable-next-line
-              audio: require('../../assets/audio/sound_sample.mp3'),
-              hidden: true,
-            },
-            B: {
-              chinese_c: '嗯，过得很好，你呢？',
-              chinese_c_hidden: '',
-              chinese_e: 'èng， guòde hěn hǎo，nǐ ne？',
-              korean: '응, 잘 보냈어. 너는 주말 잘 보냈어?',
-              // eslint-disable-next-line
-              audio: require('../../assets/audio/sound_sample.mp3'),
-              hidden: true,
-            },
-          },
-          {
-            id: 2,
-            A: {
-              chinese_c: '我也过得很好，谢谢你的关心。',
-              chinese_c_hidden: '',
-              chinese_e: '',
-              korean: '나도 정말 좋았어. 물어봐 줘서 고마워.',
-              // eslint-disable-next-line
-              audio: require('../../assets/audio/sound_sample.mp3'),
-              hidden: true,
-            },
-            B: {
-              chinese_c: '小龙’, 周末过得好吗',
-              chinese_c_hidden: '',
-              chinese_e: 'èng， guòde hěn hǎo，nǐ ne？',
-              korean: '아자아자 화이팅',
-              // eslint-disable-next-line
-              audio: require('../../assets/audio/sound_sample.mp3'),
-              hidden: true,
-            },
-          },
-        ],
-      },
+      conversation: {},
     };
+  },
+  created() {
+    axios.get(`conversations/${this.$route.params.categoryId}/${this.$route.params.conversationId}/step1`, {
+    }).then((response) => {
+      this.conversation = response.data;
+    });
+  },
+  methods: {
+    playAudio(sound) {
+      if (sound) {
+        const audio = new Audio(sound);
+        audio.play();
+      }
+    },
+    repeatAudio(sound) {
+      if (sound) {
+        const audio = new Audio(sound);
+        audio.play();
+      }
+    },
   },
 };
 </script>

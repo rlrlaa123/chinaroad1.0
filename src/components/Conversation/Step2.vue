@@ -1,42 +1,71 @@
 <template>
   <div>
-    <headers v-bind:header-name="header" v-bind:tag="1"></headers>
+    <headers v-bind:header-name="header"
+             v-bind:category-i-d="this.$route.params.categoryId"></headers>
     <div style="margin: 20px;">
       <step step2=true></step>
     </div>
     <div class="conversation-box">
-      <div class="conversation-wrapper" v-for="conversations in conversation.sentences"
-           v-bind:key="conversations.id">
-        <div class="conversation-container-A">
+      <div class="conversation-wrapper" v-for="counter in 10" v-bind:key="counter">
+        <div class="conversation-container-A"
+             v-if="counter % 2 !== 0 && conversation[`korean${counter}`]">
           <div>
-            <img class="conversation-image" :src="conversation.image">
+            <img class="conversation-image" :src="conversation.image1">
           </div>
           <div class="conversation-A">
-            <p>{{ conversations.A.chinese_c }}</p>
+            <p>{{ conversation[`chinese_c${counter}`] }}</p>
             <img class="conversation-play-btn" src="../../assets/video.png"
-                 @click.prevent="playAudio(conversations.A.audio)">
+                 @click.prevent="playAudio(conversation[`audio${counter}`])">
           </div>
         </div>
-        <div class="conversation-container-B">
-          <p style="margin-bottom: 5px;" v-if="conversations.B.hidden">
-            {{ conversations.B.chinese_c_hidden }}
+        <div class="conversation-container-B"
+             v-if="counter % 2 === 0 &&
+             conversation[`korean${counter}`] &&
+             !answer[`answer${counter}`]">
+          <p style="margin-bottom: 5px;" v-show="showText[`showText${counter}`]">
+            {{ conversation[`chinese_c${counter}`] }}
           </p>
-          <p style="margin-bottom: 5px;" v-else>
-            {{ conversations.B.chinese_c }}
+          <p style="margin-bottom: 5px;" v-show="!showText[`showText${counter}`]">
+            {{ conversation[`chinese_c${counter}_hidden`] }}
           </p>
           <p>다음 문장을 완성해서 녹음해주세요.</p>
           <div class="conversation-btn-wrapper">
-            <img src="../../assets/voicerec.png">
-            <img src="../../assets/video.png" @click.prevent="playAudio(conversations.B.audio)">
-            <img src="../../assets/show.png" @click.prevent="conversations.B.hidden = false">
+            <img src="../../assets/voicerec.png" v-show="hidden[`hidden${counter}`]"
+                 @click="record(counter)">
+            <img src="../../assets/pause.png" v-show="!hidden[`hidden${counter}`]"
+                 @click="stop(counter)">
+            <img src="../../assets/video.png"
+                 @click.prevent="playAudio(conversation[`audio${counter}`])">
+            <img src="../../assets/show.png"
+                 @click="showText[`showText${counter}`] = true">
+          </div>
+        </div>
+        <div class="conversation-container-B"
+             v-if="counter % 2 === 0
+             && conversation[`korean${counter}`]
+             && answer[`answer${counter}`]">
+          <p style="margin-bottom: 5px;">
+            {{ conversation[`chinese_c${counter}`] }}
+          </p>
+          <div class="conversation-answer-wrapper">
+            <div>
+              <span>원 답안</span>
+              <img src="../../assets/video.png" @click="playAudio(conversation[`audio${counter}`])">
+            </div>
+            <div>
+              <span>내 답안</span>
+              <img src="../../assets/video.png" @click="play()">
+            </div>
           </div>
         </div>
       </div>
     </div>
+    <pre>{{ mediaRec }}</pre>
   </div>
 </template>
-
 <script>
+// import Vue from 'vue';
+import axios from 'axios';
 import Headers from '../Header_back';
 import Step from './Step_selector';
 
@@ -48,86 +77,69 @@ export default {
   data() {
     return {
       header: '你好!',
-      conversation: {
-        id: 1,
-        title: '你好!',
-        // eslint-disable-next-line
-        image: require('../../assets/people/08.png'),
-        // eslint-disable-next-line
-        video: require('../../assets/video/sample01.mp4'),
-        sentences: [
-          {
-            id: 1,
-            A: {
-              chinese_c: '你好，‘小龙’, 周末过得好吗？',
-              chinese_c_hidden: '',
-              chinese_e: 'nǐ hǎo，‘xiǎo lóng’, zhōu mò guò de hǎo ma？',
-              korean: '안녕, “小龙”. 주말은 잘 보냈니?',
-              // eslint-disable-next-line
-              audio: require('../../assets/audio/sound_sample.mp3'),
-              hidden: true,
-            },
-            B: {
-              chinese_c: '嗯，过得很好，你呢？',
-              chinese_c_hidden: '',
-              chinese_e: 'èng， guòde hěn hǎo，nǐ ne？',
-              korean: '응, 잘 보냈어. 너는 주말 잘 보냈어?',
-              // eslint-disable-next-line
-              audio: require('../../assets/audio/sound_sample.mp3'),
-              hidden: true,
-            },
-          },
-          {
-            id: 2,
-            A: {
-              chinese_c: '我也过得很好，谢谢你的关心。',
-              chinese_c_hidden: '',
-              chinese_e: '',
-              korean: '나도 정말 좋았어. 물어봐 줘서 고마워.',
-              // eslint-disable-next-line
-              audio: require('../../assets/audio/sound_sample.mp3'),
-              hidden: true,
-            },
-            B: {
-              chinese_c: '小龙’, 周末过得好吗',
-              chinese_c_hidden: '',
-              chinese_e: 'èng， guòde hěn hǎo，nǐ ne？',
-              korean: '아자아자 화이팅',
-              // eslint-disable-next-line
-              audio: require('../../assets/audio/sound_sample.mp3'),
-              hidden: true,
-            },
-          },
-        ],
+      conversation: {},
+      mediaRec: '',
+      hidden: {
+        hidden1: true,
+        hidden2: true,
+        hidden3: true,
+        hidden4: true,
+        hidden5: true,
+        hidden6: true,
+        hidden7: true,
+        hidden8: true,
+        hidden9: true,
+        hidden10: true,
+      },
+      showText: {
+        showText1: false,
+        showText2: false,
+        showText3: false,
+        showText4: false,
+        showText5: false,
+        showText6: false,
+        showText7: false,
+        showText8: false,
+        showText9: false,
+        showText10: false,
+      },
+      answer: {
+        answer1: false,
+        answer2: false,
+        answer3: false,
+        answer4: false,
+        answer5: false,
+        answer6: false,
+        answer7: false,
+        answer8: false,
+        answer9: false,
+        answer10: false,
       },
     };
   },
-  mounted() {
-    const self = this;
-    self.conversation.sentences.map((ele) => {
-      const element = ele.A;
-      const textLength = element.chinese_c.length;
-      let hiddenText = '';
-      for (let i = 0; i <= textLength / 2; i += 1) {
-        hiddenText = hiddenText.concat('-');
+  created() {
+    // const currentdate = new Date();
+    // const datetime = currentdate.getFullYear().toString()
+    //   + (currentdate.getMonth() + 1).toString()
+    //   + currentdate.getDate().toString()
+    //   + currentdate.getHours().toString()
+    //   + currentdate.getMinutes().toString()
+    //   + currentdate.getSeconds().toString();
+    // this.mediaRec = new Vue.cordova.Media(`${datetime}.mp3`);
+
+    axios.get(`conversations/${this.$route.params.categoryId}/${this.$route.params.conversationId}/step1`, {
+    }).then((response) => {
+      for (let i = 1; i <= 10; i += 1) {
+        this.conversation = response.data;
+        const textLength = this.conversation[`chinese_c${i}`].length;
+        let hiddenText = '';
+        for (let j = 0; j <= textLength / 2; j += 1) {
+          hiddenText = hiddenText.concat('-');
+        }
+
+        this.conversation[`chinese_c${i}_hidden`]
+          = this.conversation[`chinese_c${i}`].substr(0, (textLength / 2) - 1) + hiddenText;
       }
-
-      element.chinese_c_hidden = element.chinese_c.substr(0, (textLength / 2) - 1) + hiddenText;
-
-      return 1;
-    });
-
-    self.conversation.sentences.map((ele) => {
-      const element = ele.B;
-      const textLength = element.chinese_c.length;
-      let hiddenText = '';
-      for (let i = 0; i <= textLength / 2; i += 1) {
-        hiddenText = hiddenText.concat('-');
-      }
-
-      element.chinese_c_hidden = element.chinese_c.substr(0, (textLength / 2) - 1) + hiddenText;
-
-      return 1;
     });
   },
   methods: {
@@ -136,6 +148,20 @@ export default {
         const audio = new Audio(sound);
         audio.play();
       }
+    },
+    record(index) {
+      this.hidden[`hidden${index}`] = false;
+      // this.mediaRec.startRecord();
+    },
+    stop(index) {
+      this.answer[`answer${index}`] = true;
+      // this.mediaRec.stopRecord();
+    },
+    play() {
+      // this.mediaRec.play();
+    },
+    release() {
+      // this.mediaRec.release();
     },
   },
 };
@@ -200,7 +226,25 @@ export default {
     right: 10px;
   }
 
+  .conversation-answer-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
   .conversation-btn-wrapper img {
     width: 25px;
+  }
+
+  .conversation-answer-wrapper div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 5px;
+  }
+
+  .conversation-answer-wrapper img {
+    width: 25px;
+    margin-left: 5px;
   }
 </style>

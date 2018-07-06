@@ -10,10 +10,10 @@
                v-bind:style="{ backgroundImage: 'url(' + category.image + ')' }"></div>
           <div class="contents-text">
             <div class="contents-category-name-wrapper">
-              <div class="contents-category-name">{{ category.name }}</div>
+              <div class="contents-category-name">{{ category.category }}</div>
             </div>
-            <p>{{ category.korean }}</p>
-            <p>{{ category.chineses }}</p>
+            <p>{{ category.title_ko }}</p>
+            <p>{{ category.title_ch }}</p>
           </div>
         </router-link>
       </div>
@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import Headers from '../Header';
 import Modal from '../Modal_navi';
 import Navigator from '../Navigator';
@@ -39,33 +40,18 @@ export default {
       showModal: false,
       toggle: true,
       menuName: ['초급', '중급'],
-      categories: [
-        {
-          id: 1,
-          name: '과학/IT',
-          korean: '< 국내 연구진, 128억년 전 새 블랙홀 발견 >',
-          chineses: '< 韩国研究团队发现了128亿年前的新黑洞 >',
-          // eslint-disable-next-line
-          image: require('../../assets/contents/10.jpg'),
-        },
-        {
-          id: 2,
-          name: '사회/문화',
-          korean: '< 툭하면 다리 꼬는 당신, 골반 척추도 꼬인다 >',
-          chineses: '< 稍不注意，腿会弯曲，骨盆和脊柱也会弯曲 >',
-          // eslint-disable-next-line
-          image: require('../../assets/contents/09.jpg'),
-        },
-        {
-          id: 3,
-          name: '사회/문화',
-          korean: '< 툭하면 다리 꼬는 당신, 골반 척추도 꼬인다 >',
-          chineses: '< 稍不注意，腿会弯曲，骨盆和脊柱也会弯曲 >',
-          // eslint-disable-next-line
-          image: require('../../assets/contents/09.jpg'),
-        },
-      ],
+      categories: [],
     };
+  },
+  created() {
+    axios.get('contents', {
+    }).then((response) => {
+      const categories = response.data;
+      categories.map((ele) => {
+        this.categories.push(ele);
+        return 1;
+      });
+    });
   },
 };
 </script>

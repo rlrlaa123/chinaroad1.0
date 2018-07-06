@@ -19,3 +19,4 @@ selenium-debug.log
 # Cordova
 www/
 platforms/
+plugins/

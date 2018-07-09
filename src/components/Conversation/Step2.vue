@@ -31,13 +31,13 @@
           <p>다음 문장을 완성해서 녹음해주세요.</p>
           <div class="conversation-btn-wrapper">
             <img src="../../assets/voicerec.png" v-show="hidden[`hidden${counter}`]"
-                 @click="record(counter)">
-            <img src="../../assets/pause.png" v-show="!hidden[`hidden${counter}`]"
-                 @click="stop(counter)">
+                 @click.prevent="record(counter)">
+            <img src="../../assets/stop.png" v-show="!hidden[`hidden${counter}`]"
+                 @click.prevent="stop(counter)">
             <img src="../../assets/video.png"
                  @click.prevent="playAudio(conversation[`audio${counter}`])">
             <img src="../../assets/show.png"
-                 @click="showText[`showText${counter}`] = true">
+                 @click.prevent="showText[`showText${counter}`] = true">
           </div>
         </div>
         <div class="conversation-container-B"
@@ -50,17 +50,21 @@
           <div class="conversation-answer-wrapper">
             <div>
               <span>원 답안</span>
-              <img src="../../assets/video.png" @click="playAudio(conversation[`audio${counter}`])">
+              <img src="../../assets/video.png"
+                   @click.prevent="playAudio(conversation[`audio${counter}`])">
             </div>
             <div>
               <span>내 답안</span>
-              <img src="../../assets/video.png" @click="play()">
+              <img src="../../assets/video.png"
+                   @click.prevent="play()">
             </div>
           </div>
         </div>
       </div>
     </div>
     <pre>{{ mediaRec }}</pre>
+    <modal v-if="showModal" :step="2" :message="'각 문장을 녹음하고, 원어민 발음과 비교해보세요.'"
+           @close="showModal = false"></modal>
   </div>
 </template>
 <script>
@@ -68,16 +72,21 @@
 import axios from 'axios';
 import Headers from '../Header_back';
 import Step from './Step_selector';
+import Modal from './Step_Modal';
 
 export default {
   components: {
     Headers,
     Step,
+    Modal,
   },
   data() {
     return {
+      showModal: this.$store.state.tut_step2,
       header: '你好!',
       conversation: {},
+      // eslint-disable-next-line
+      sampleAudio: require('../../assets/audio/sound_sample.mp3'),
       mediaRec: '',
       hidden: {
         hidden1: true,
@@ -144,13 +153,13 @@ export default {
   },
   methods: {
     playAudio(sound) {
-      if (sound !== axios.defaults.baseURL.substr(0, 22)) {
+      // if (sound !== axios.defaults.baseURL.substr(0, 22)) {
+      if (sound !== axios.defaults.baseURL.substr(0, 26)) {
         const audio = new Audio(sound);
         audio.play();
       } else {
         // eslint-disable-next-line
-        const audioFile = require('../../assets/audio/sound_sample.mp3');
-        const audio = new Audio(audioFile);
+        const audio = new Audio(this.sampleAudio);
         audio.play();
       }
     },
@@ -161,12 +170,14 @@ export default {
     stop(index) {
       this.answer[`answer${index}`] = true;
       // this.mediaRec.stopRecord();
+      // alert(this.mediaRec.getCurrentPosition((success) => { alert(`success: ${success}`); },
+      // (error) => { alert(`error: ${error}`); }));
     },
     play() {
       // this.mediaRec.play();
+      // this.mediaRec.release();
     },
     release() {
-      // this.mediaRec.release();
     },
   },
 };

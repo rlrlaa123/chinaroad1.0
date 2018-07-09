@@ -5,7 +5,8 @@
     <div style="margin: 20px 20px 0 20px;">
       <step step1=true></step>
     </div>
-    <video controls="controls" :src="conversation.video1" type="video/mp4"></video>
+    <video controls="controls" :src="conversation.video1 === '' ? conversation.video1 : sampleVideo"
+           type="video/mp4"></video>
     <h1>{{ conversation.name }}</h1>
     <div class="conversation-header">
       <div class="dialog">Dialog</div>
@@ -56,6 +57,8 @@
         </div>
       </div>
     </div>
+    <modal v-if="showModal" :step="1" :message="'자막이 있는 영상, 자막이 없는 영상을 차례대로 보며 공부하세요.'"
+           @close="showModal = false"></modal>
   </div>
 </template>
 
@@ -63,17 +66,23 @@
 import axios from 'axios';
 import Headers from '../Header_back';
 import Step from './Step_selector';
+import Modal from './Step_Modal';
 
 export default {
   components: {
     Headers,
     Step,
+    Modal,
   },
   data() {
     return {
+      showModal: this.$store.state.tut_step1,
       header: '你好!',
       conversation: {},
-      // sampleAudio: require('../../assets/audio/sound_sample.mp3'),
+      // eslint-disable-next-line
+      sampleVideo: require('../../assets/video/sample01.mp4'),
+      // eslint-disable-next-line
+      sampleAudio: require('../../assets/audio/sound_sample.mp3'),
     };
   },
   created() {
@@ -84,13 +93,13 @@ export default {
   },
   methods: {
     playAudio(sound) {
-      if (sound !== axios.defaults.baseURL.substr(0, 22)) {
+      // if (sound !== axios.defaults.baseURL.substr(0, 22)) {
+      if (sound !== axios.defaults.baseURL.substr(0, 26)) {
         const audio = new Audio(sound);
         audio.play();
       } else {
         // eslint-disable-next-line
-        const audioFile = require('../../assets/audio/sound_sample.mp3');
-        const audio = new Audio(audioFile);
+        const audio = new Audio(this.sampleAudio);
         audio.play();
       }
     },

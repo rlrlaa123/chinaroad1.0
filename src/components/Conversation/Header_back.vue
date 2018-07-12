@@ -1,20 +1,17 @@
 <template>
   <header>
-    <router-link :to="{ name: 'List', params: { categoryId: categoryID }}">
+    <router-link :to="{ name: 'List', params: { categoryId: this.$route.params.categoryId }}">
       <img src="../../assets/back.png">
     </router-link>
-    <span class="header-name">{{ header }}</span>
+    <span class="header-name">{{ headerName }}</span>
     <span style="width: 25px;"></span>
   </header>
 </template>
 
 <script>
 export default {
-  props: ['headerName', 'categoryID'],
+  props: ['headerName'],
   methods: {
-    back() {
-      this.$router.go(-1);
-    },
   },
 };
 </script>

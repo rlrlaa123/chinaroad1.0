@@ -1,7 +1,12 @@
 <template>
   <div>
-    <headers v-bind:headerName=header></headers>
-    <div class="list-wrapper" v-for="(list, index) in lists"
+    <header>
+      <router-link :to="{ name: 'Conversation' }">
+        <img src="../../assets/back.png">
+      </router-link>
+      <span class="header-name">{{ header }}</span>
+      <span style="width: 25px;"></span>
+    </header>    <div class="list-wrapper" v-for="(list, index) in lists"
          v-bind:key="list.id">
       <router-link :to="{ name: 'Step1',
        params: { categoryId: $route.params.categoryId, conversationId: list.id } }">
@@ -22,7 +27,6 @@
 
 <script>
 import axios from 'axios';
-import Headers from '../Header_back';
 
 export default {
   components: {
@@ -110,5 +114,24 @@ export default {
   .list-image-container p {
     font-size: 15px;
     font-weight: normal;
+  }
+
+  header {
+    height: 50px;
+    box-shadow: 1px 6px 6px 1px rgba(0,0,0,0.02);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  header img {
+    width: 25px;
+    margin-left: 10px;
+  }
+
+  .header-name {
+    font-size: 20px;
+    color: #c21720;
+    font-weight: bold;
   }
 </style>

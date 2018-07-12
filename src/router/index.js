@@ -7,10 +7,13 @@ import Step2 from '../components/Conversation/Step2';
 import Step3 from '../components/Conversation/Step3';
 import Contents from '../components/Contents/Category';
 import Content from '../components/Contents/Content';
-import Login from '../components/Login/Login';
+import Layout from '../components/Login/Layout';
+import EmailLogin from '../components/Login/Email';
 import Agreement from '../components/Login/Agreement';
 import Edit from '../components/Editing/Edit_page';
 import Home from '../components/Home';
+import Register from '../components/Login/Register';
+import SNSLogin from '../components/Login/SNSLogin';
 
 Vue.use(Router);
 
@@ -25,13 +28,28 @@ export default new Router({
     },
     {
       path: '/login',
-      name: 'Login',
-      component: Login,
+      name: 'Layout',
+      component: Layout,
+    },
+    {
+      path: '/login/email',
+      name: 'EmailLogin',
+      component: EmailLogin,
+    },
+    {
+      path: '/login/snslogin',
+      name: 'SNSLogin',
+      component: SNSLogin,
     },
     {
       path: '/agreement',
       name: 'Agreement',
       component: Agreement,
+    },
+    {
+      path: '/register',
+      name: 'Register',
+      component: Register,
     },
     {
       path: '/conversation',

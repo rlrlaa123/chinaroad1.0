@@ -1,7 +1,6 @@
 <template>
   <div>
-    <headers v-bind:header-name="header"
-             v-bind:category-i-d="this.$route.params.categoryId"></headers>
+    <headers v-bind:header-name="header"></headers>
     <div style="margin: 20px 20px 0 20px;">
       <step step3=true></step>
     </div>
@@ -41,7 +40,7 @@
 <script>
 // import Vue from 'vue';
 import axios from 'axios';
-import Headers from '../Header_back';
+import Headers from './Header_back';
 import Step from './Step_selector';
 import Modal from './Step_Modal';
 
@@ -136,6 +135,7 @@ export default {
     },
     stopRecroded() {
       this.$refs.video.pause();
+      this.play = false;
       // this.mediaRec.stop();
       // this.mediaRec.release();
     },

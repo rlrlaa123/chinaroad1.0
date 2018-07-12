@@ -1,7 +1,6 @@
 <template>
   <div>
-    <headers v-bind:header-name="header"
-             v-bind:category-i-d="this.$route.params.categoryId"></headers>
+    <headers v-bind:header-name="header"></headers>
     <div style="margin: 20px 20px 0 20px;">
       <step step1=true></step>
     </div>
@@ -64,7 +63,7 @@
 
 <script>
 import axios from 'axios';
-import Headers from '../Header_back';
+import Headers from './Header_back';
 import Step from './Step_selector';
 import Modal from './Step_Modal';
 

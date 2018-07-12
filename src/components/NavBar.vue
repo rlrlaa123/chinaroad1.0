@@ -44,7 +44,7 @@
           <div style="text-align: center;">
             <img src="../assets/logout.png">
           </div>
-          <span>로그아웃</span>
+          <span @click="logout">로그아웃</span>
         </div>
       </div>
     </div>
@@ -69,6 +69,9 @@ export default {
       if (e.offsetX >= modalWidth) {
         this.$emit('close');
       }
+    },
+    logout() {
+      this.$firebaseAuth.logout();
     },
   },
 };

@@ -5,28 +5,31 @@
         <div class="question-container">
           <div>
             <img class="question-image" :src=show.questions.image>
-            <p v-if="language">{{ show.questions.question_c }}</p>
-            <p v-else>{{ show.questions.question_k }}</p>
+            <p v-show="show.language">{{ show.questions.question_ch }}</p>
+            <p v-show="!show.language">{{ show.questions.question_ko }}</p>
             <div class="btn-language-wrapper">
               <div></div>
               <div style="display: flex;">
-                <span v-if="language" class="btn-language" @click="switchLanguage">
+                <span v-show="show.language" class="btn-language"
+                      @click="switchLanguage(show.id - 1)">
                   한국어
                 </span>
-                <span v-else class="btn-language" @click="switchLanguage">
+                <span v-show="!show.language" class="btn-language"
+                      @click="switchLanguage(show.id - 1)">
                   중국어
                 </span>
-                <span class="btn-language" @click="showExModal = true">예시답안</span>
+                <span class="btn-language" @click="show.showExModal = true">예시답안</span>
               </div>
             </div>
             <p class="current-time">{{ currentTime  }}</p>
           </div>
-          <div v-if="language" class="question-audio"
-               @click="playQuestion(show.questions.question_c_audio)">
+          <div v-show="show.language" class="question-audio"
+               @click="playQuestion(show.questions.question_ch_audio)">
             <span>{{ show.id }}번째</span>
             <img src="../../assets/headphone.png">
           </div>
-          <div v-else class="question-audio" @click="playQuestion(show.questions.question_k_audio)">
+          <div v-show="!show.language" class="question-audio"
+               @click="playQuestion(show.questions.question_ko_audio)">
             <span>{{ show.id }}번째</span>
             <img src="../../assets/headphone.png">
           </div>
@@ -37,10 +40,10 @@
             {{ currentTime  }}
           </p>
         </div>
-        <ex-modal v-if="showExModal && language" :text="show.questions.answer_c"
-                  :record="show.questions.answer_c_audio" @close="showExModal = false"></ex-modal>
-        <ex-modal v-if="showExModal && !language" :text="show.questions.answer_k"
-                  :record="show.questions.answer_k_audio" @close="showExModal = false"></ex-modal>
+        <ex-modal v-if="show.showExModal && show.language" :text="show.questions.answer_ch"
+                  :record="show.questions.answer_ch_audio" @close="show.showExModal = false"></ex-modal>
+        <ex-modal v-if="show.showExModal && !show.language" :text="show.questions.answer_ko"
+                  :record="show.questions.answer_ko_audio" @close="show.showExModal = false"></ex-modal>
       </div>
       <div class="reply-box">
         <div class="reply-chinese">中</div>
@@ -52,6 +55,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import Modal from './Modal_edit';
 import Headers from '../Header_back';
 import Navigator from '../Navigator';
@@ -71,60 +75,7 @@ export default {
       reply: '',
       reply_index: 0,
       // language === true, 중국어
-      language: true,
-      edits: [
-        {
-          id: 1,
-          question_k: '한국에는 어떤 스포츠가 가장 인기가 많니?',
-          answer_k: '야구야',
-          question_c: '仅指現代標準漢語以北京話为标准语音、以官话为基础的現代白话文著',
-          answer_c: '在非表音情況下，僅指現代白話文的書面語。大中华地区',
-          // eslint-disable-next-line
-          question_c_audio: require('../../assets/audio/sound_sample.mp3'),
-          // eslint-disable-next-line
-          answer_c_audio: require('../../assets/audio/sound_sample.mp3'),
-          // eslint-disable-next-line
-          question_k_audio: require('../../assets/audio/sound_sample.mp3'),
-          // eslint-disable-next-line
-          answer_k_audio: require('../../assets/audio/sound_sample.mp3'),
-          // eslint-disable-next-line
-          image: require('../../assets/edit/009.jpg'),
-        },
-        {
-          id: 2,
-          question_k: '한국에는 어떤 스포츠가 가장 인기가 많니?',
-          answer_k: '야구야',
-          question_c: '仅指現代標準漢語以北京話为标准语音、以官话为基础的現代白话文著',
-          answer_c: '在非表音情況下，僅指現代白話文的書面語。大中华地区',
-          // eslint-disable-next-line
-          question_c_audio: require('../../assets/audio/sound_sample.mp3'),
-          // eslint-disable-next-line
-          answer_c_audio: require('../../assets/audio/sound_sample.mp3'),
-          // eslint-disable-next-line
-          question_k_audio: require('../../assets/audio/sound_sample.mp3'),
-          // eslint-disable-next-line
-          answer_k_audio: require('../../assets/audio/sound_sample.mp3'),
-          // eslint-disable-next-line
-          image: require('../../assets/edit/007.jpg'),
-        },
-        {
-          id: 3,
-          question_k: '한국에는 어떤 스포츠가 가장 인기가 많니?',
-          answer_k: '야구야',
-          question_c: '仅指現代標準漢語以北京話为标准语音、以官话为基础的現代白话文著',
-          answer_c: '在非表音情況下，僅指現代白話文的書面語。大中华地区',
-          // eslint-disable-next-line
-          question_c_audio: require('../../assets/audio/sound_sample.mp3'),
-          // eslint-disable-next-line
-          answer_c_audio: require('../../assets/audio/sound_sample.mp3'),
-          // eslint-disable-next-line
-          question_k_audio: require('../../assets/audio/sound_sample.mp3'),
-          // eslint-disable-next-line
-          answer_k_audio: require('../../assets/audio/sound_sample.mp3'),
-          // eslint-disable-next-line
-          image: require('../../assets/edit/sample2.jpeg'),
-        },
-      ],
+      edits: null,
       showEdits: [],
     };
   },
@@ -137,16 +88,23 @@ export default {
       ${currentdate.getMinutes()} :
       ${currentdate.getSeconds()}`;
 
-    if (this.edits) {
-      this.showEdits.push({
-        id: 1,
-        questions: this.edits[0],
-        answers: '',
-      });
-    } else {
-      /* eslint-disable */
-      confirm('아직 질문이 등록되지 않았습니다.');
-    }
+    axios.get('todayedits/', {
+    }).then((response) => {
+      this.edits = response.data;
+
+      if (this.edits) {
+        this.showEdits.push({
+          id: 1,
+          questions: this.edits[0],
+          answers: '',
+          language: true,
+          showExModal: false,
+        });
+      } else {
+        // eslint-disable-next-line
+        confirm('아직 질문이 등록되지 않았습니다.');
+      }
+    });
   },
   methods: {
     toggleLevel() {
@@ -162,22 +120,24 @@ export default {
       this.showEdits[this.showEdits.length - 1].answers = reply;
       this.reply = '';
       if (this.edits.length === this.showEdits.length) {
-        /* eslint-disable */
+        // eslint-disable-next-line
         confirm('오늘의 첨삭을 마쳤습니다.');
       } else {
         this.showEdits.push({
           id: this.reply_index + 1,
           questions: {},
           answers: '',
+          language: true,
+          showExModal: false,
         });
         this.showEdits[this.showEdits.length - 1].questions = this.edits[this.reply_index];
       }
     },
-    switchLanguage() {
-      if (this.language) {
-        this.language = false;
+    switchLanguage(id) {
+      if (this.showEdits[id].language) {
+        this.showEdits[id].language = false;
       } else {
-        this.language = true;
+        this.showEdits[id].language = true;
       }
     },
     playQuestion(sound) {
@@ -185,7 +145,7 @@ export default {
         const audio = new Audio(sound);
         audio.play();
       }
-    }
+    },
   },
 };
 </script>

@@ -26,6 +26,7 @@
 
 <script>
 import firebase from 'firebase';
+import axios from 'axios';
 
 export default {
   data() {
@@ -41,7 +42,14 @@ export default {
       if (result.credential) {
         // This gives you a Google Access Token. You can use it to access the Google API.
         // const token = result.credential.accessToken;
-        this.$router.push({ path: '/snsregister' });
+        axios.get(`checksnslogin/${firebase.auth().currentUser.email}`, {
+        }).then((response) => {
+          if (response.data === 'login') {
+            this.$router.push({ path: '/conversation' });
+          } else {
+            this.$router.push({ path: '/snsregister' });
+          }
+        });
       }
     }).catch((error) => {
       // Handle Errors here.

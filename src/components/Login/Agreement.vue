@@ -18,7 +18,6 @@
       </div>
       <div class="next-btn">
         <a @click="register">다음</a>
-        <!--<router-link :to="{ name: 'Register' }">다음</router-link>-->
       </div>
     </div>
   </div>
@@ -28,7 +27,7 @@
 export default {
   data() {
     return {
-      checked: true,
+      checked: false,
     };
   },
   methods: {

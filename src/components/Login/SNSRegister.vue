@@ -4,17 +4,6 @@
       <img src="../../assets/Logo.png" class="logo">
     </header>
     <div id="wrapper">
-      <label class="input-label">이메일</label>
-      <input type="email" class="input-form" v-model="email" id="email"
-             name="email" placeholder="Email Address">
-      <p class="error" v-if="errors.email">{{ errors.email[0] }}</p>
-      <label class="input-label">패스워드</label>
-      <input type="password" class="input-form"  v-model="password" id="password" name="password"
-             placeholder="Password">
-      <p class="error" v-if="errors.password">{{ errors.password[0] }}</p>
-      <label class="input-label">패스워드 확인</label>
-      <input type="password" class="input-form" v-model="passwordConfirm" id="password-confirmation"
-             name="password-confirmation" placeholder="Pasword Confirm">
       <label class="input-label">이름</label>
       <input type="text" class="input-form" v-model="name" id="name" name="name" placeholder="Name">
       <p class="error" v-if="errors.name">{{ errors.name[0] }}</p>
@@ -36,16 +25,14 @@
 
 <script>
 import axios from 'axios';
+import firebase from 'firebase/app';
 
 export default {
   data() {
     return {
-      email: null,
-      password: null,
-      passwordConfirm: null,
-      name: null,
+      name: firebase.auth().currentUser.displayName,
       gender: null,
-      type: 'email',
+      type: firebase.auth().currentUser.providerData[0].providerId,
       errors: {},
     };
   },
@@ -53,25 +40,21 @@ export default {
     handleRegister() {
       const self = this;
       const request = {
-        email: this.email,
-        password: this.password,
-        password_confirmation: this.passwordConfirm,
+        email: firebase.auth().currentUser.email,
         name: this.name,
         gender: this.gender,
         type: this.type,
       };
-      axios.post('register', request).then((response) => {
+      axios.post('snsregister', request).then((response) => {
         if (response.data === 'registered') {
-          self.$firebaseAuth.register(this.email, this.password);
+          self.$router.push({ path: '/conversation' });
         } else {
           this.errors = response.data;
         }
-        // response.data
       }).catch((error) => {
         /* eslint-disable-next-line */
         console.log(error);
       });
-      // }
     },
   },
 };
@@ -81,7 +64,7 @@ export default {
   #background {
     background-image: url("../../assets/background.png");
     background-position: center;
-    height: 100%;
+    height: 100vh;
     padding-top: 25px;
     color: white;
     font-size: 15px;

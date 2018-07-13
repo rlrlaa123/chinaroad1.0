@@ -2,7 +2,6 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import router from '../router/index';
-import { store } from '../store/store';
 
 /* eslint no-param-reassign: "error" */
 export default (Vue) => {

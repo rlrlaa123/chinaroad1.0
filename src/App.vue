@@ -26,7 +26,7 @@ export default {
   body {
     margin: 0;
     font-size: 13px;
-    background-color: #f5f5f5
+    background-color: #f5f5f5;
   }
 
   a {

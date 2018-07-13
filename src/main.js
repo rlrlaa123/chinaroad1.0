@@ -38,6 +38,7 @@ const config = {
   storageBucket: '',
   messagingSenderId: '620837007241',
 };
+
 firebase.initializeApp(config);
 
 router.beforeEach((to, from, next) => {

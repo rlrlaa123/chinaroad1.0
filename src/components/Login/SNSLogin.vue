@@ -28,13 +28,20 @@
 import firebase from 'firebase';
 
 export default {
+  data() {
+    return {
+      email: null,
+      name: null,
+      gender: null,
+      type: null,
+    };
+  },
   created() {
     firebase.auth().getRedirectResult().then((result) => {
       if (result.credential) {
         // This gives you a Google Access Token. You can use it to access the Google API.
         // const token = result.credential.accessToken;
-        // ...
-        this.$router.push({ path: '/conversation' });
+        this.$router.push({ path: '/snsregister' });
       }
     }).catch((error) => {
       // Handle Errors here.
@@ -55,6 +62,7 @@ export default {
 
     },
     handleGoogle() {
+      this.$store.commit('setRegisterType', 'google');
       this.$firebaseAuth.googleLogin();
     },
   },

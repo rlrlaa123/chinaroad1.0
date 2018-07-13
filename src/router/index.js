@@ -13,6 +13,7 @@ import Agreement from '../components/Login/Agreement';
 import Edit from '../components/Editing/Edit_page';
 import Home from '../components/Home';
 import Register from '../components/Login/Register';
+import SNSRegister from '../components/Login/SNSRegister';
 import SNSLogin from '../components/Login/SNSLogin';
 
 Vue.use(Router);
@@ -40,6 +41,11 @@ export default new Router({
       path: '/login/snslogin',
       name: 'SNSLogin',
       component: SNSLogin,
+    },
+    {
+      path: '/snsregister',
+      name: 'SNSRegister',
+      component: SNSRegister,
     },
     {
       path: '/agreement',

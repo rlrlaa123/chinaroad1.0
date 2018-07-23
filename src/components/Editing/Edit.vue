@@ -41,14 +41,16 @@
           </p>
         </div>
         <ex-modal v-if="show.showExModal && show.language" :text="show.questions.answer_ch"
-                  :record="show.questions.answer_ch_audio" @close="show.showExModal = false"></ex-modal>
+                  :record="show.questions.answer_ch_audio"
+                  @close="show.showExModal = false"></ex-modal>
         <ex-modal v-if="show.showExModal && !show.language" :text="show.questions.answer_ko"
-                  :record="show.questions.answer_ko_audio" @close="show.showExModal = false"></ex-modal>
+                  :record="show.questions.answer_ko_audio"
+                  @close="show.showExModal = false"></ex-modal>
       </div>
       <div class="reply-box">
         <div class="reply-chinese">中</div>
         <input class="reply-input" v-model="reply" placeholder="질문에 답해주세요.">
-        <div class="btn" @click="submitAnswer(reply)">제출</div>
+        <div class="btn" @click="submitAnswer(reply, reply_index)">제출</div>
       </div>
     </div>
   </div>
@@ -87,22 +89,67 @@ export default {
       ${currentdate.getHours()} :
       ${currentdate.getMinutes()} :
       ${currentdate.getSeconds()}`;
-
-    axios.get('todayedits/', {
+    axios.get(`checkTodayConfirms/${this.$firebaseAuth.currentUser().email}`, {
     }).then((response) => {
-      this.edits = response.data;
+      let count = 0;
+      for (let i = 0; i < response.data.length; i += 1) {
+        if (response.data[i] !== null) {
+          count += 1;
+        }
+      }
 
-      if (this.edits) {
-        this.showEdits.push({
-          id: 1,
-          questions: this.edits[0],
-          answers: '',
-          language: true,
-          showExModal: false,
+      if (count === 0) {
+        axios.get('todayedits/', {
+        }).then((response2) => {
+          this.edits = response2.data;
+          if (this.edits.length !== 0) {
+            this.showEdits.push({
+              id: 1,
+              questions: this.edits[0],
+              answers: '',
+              language: true,
+              showExModal: false,
+            });
+          } else {
+            // eslint-disable-next-line
+            confirm('아직 질문이 등록되지 않았습니다.');
+          }
         });
       } else {
-        // eslint-disable-next-line
-        confirm('아직 질문이 등록되지 않았습니다.');
+        this.$emit('closeModal');
+        axios.get('todayedits/', {
+        }).then((response3) => {
+          this.edits = response3.data;
+          if (this.edits.length !== 0) {
+            this.showEdits.push({
+              id: 1,
+              questions: this.edits[0],
+              answers: '',
+              language: true,
+              showExModal: false,
+            });
+          }
+          for (let i = 0; i < response.data.length; i += 1) {
+            if (response.data[i] !== null) {
+              this.reply_index += 1;
+              this.showEdits[this.showEdits.length - 1].answers = response.data[i].reply;
+              this.reply = '';
+              if (this.edits.length === this.showEdits.length) {
+                // eslint-disable-next-line
+                confirm('오늘의 첨삭을 마쳤습니다.');
+              } else {
+                this.showEdits.push({
+                  id: this.reply_index + 1,
+                  questions: {},
+                  answers: '',
+                  language: true,
+                  showExModal: false,
+                });
+                this.showEdits[this.showEdits.length - 1].questions = this.edits[this.reply_index];
+              }
+            }
+          }
+        });
       }
     });
   },
@@ -115,7 +162,16 @@ export default {
         this.level = true;
       }
     },
-    submitAnswer(reply) {
+    submitAnswer(reply, editIndex) {
+      const request = {
+        email: this.$firebaseAuth.currentUser().email,
+        edit_id: this.edits[editIndex].id,
+        reply,
+      };
+      axios.post('sendReply/', request).then((response) => {
+        // eslint-disable-next-line
+        console.log(response);
+      });
       this.reply_index += 1;
       this.showEdits[this.showEdits.length - 1].answers = reply;
       this.reply = '';

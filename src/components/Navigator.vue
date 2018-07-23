@@ -6,10 +6,11 @@
         <div id="menu-name">{{ naviName }}</div>
       </div>
       <div id="toggle-wrapper" >
-        <span class="level" v-bind:class="{ active : toggle }" @click="clickEasy">
+        <span class="level" v-bind:class="{ active : toggle === 1 }" @click="clickEasy">
           {{ menuName[0] }}
         </span>
-        <span class="toggle" v-bind:class="{ active : !toggle }" @click="clickHard">
+        <span class="toggle" v-bind:class="{ active : toggle === 2 || toggle === 3 }"
+              @click="clickHard">
           {{ menuName[1] }}
         </span>
       </div>

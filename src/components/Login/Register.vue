@@ -45,7 +45,7 @@ export default {
       passwordConfirm: null,
       name: null,
       gender: null,
-      type: 'email',
+      registered: 'email',
       errors: {},
     };
   },
@@ -58,7 +58,7 @@ export default {
         password_confirmation: this.passwordConfirm,
         name: this.name,
         gender: this.gender,
-        type: this.type,
+        registered: this.registered,
       };
       axios.post('register', request).then((response) => {
         if (response.data === 'registered') {

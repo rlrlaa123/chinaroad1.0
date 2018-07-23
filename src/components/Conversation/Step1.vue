@@ -17,7 +17,7 @@
           <span class="conversation-step">{{ counter %2 === 0 ? 'B' : 'A'}}</span>
           <div class="conversation-sentence">
             <p>{{ conversation['chinese_c' + counter] }}</p>
-            <p class="lighter">{{ conversation['chinese_e' + counter] }}</p>
+            <p>{{ conversation['chinese_e' + counter] }}</p>
             <p>{{ conversation['korean' + counter] }}</p>
           </div>
           <div class="conversation-button">
@@ -34,7 +34,7 @@
           <span class="conversation-step">A</span>
           <div class="conversation-sentence">
             <p>{{ sentence.A.chinese_c }}</p>
-            <p class="lighter">{{ sentence.A.chinese_e }}</p>
+            <p>{{ sentence.A.chinese_e }}</p>
             <p>{{ sentence.A.korean }}</p>
           </div>
           <div class="conversation-button">
@@ -46,7 +46,7 @@
           <span class="conversation-step">B</span>
           <div class="conversation-sentence">
             <p>{{ sentence.B.chinese_c }}</p>
-            <p class="lighter">{{ sentence.B.chinese_e }}</p>
+            <p>{{ sentence.B.chinese_e }}</p>
             <p>{{ sentence.B.korean }}</p>
           </div>
           <div class="conversation-button">
@@ -174,18 +174,15 @@ export default {
     font-size: 13px;
     text-align: left;
     margin: 0 15px;
-    font-weight: lighter;
+    font-weight: normal;
   }
 
   .conversation-sentence p {
     margin: 5px 0;
+    font-weight: normal;
   }
 
   .conversation-button img {
     width: 25px;
-  }
-
-  .lighter {
-    color: grey;
   }
 </style>

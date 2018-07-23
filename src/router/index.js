@@ -11,6 +11,7 @@ import Layout from '../components/Login/Layout';
 import EmailLogin from '../components/Login/Email';
 import Agreement from '../components/Login/Agreement';
 import Edit from '../components/Editing/Edit_page';
+import Confirm from '../components/Editing/Edit_confirmShow';
 import Home from '../components/Home';
 import Register from '../components/Login/Register';
 import SNSRegister from '../components/Login/SNSRegister';
@@ -97,5 +98,10 @@ export default new Router({
       name: 'Edit',
       component: Edit,
     },
+    {
+      path: '/confirm/:confirmId',
+      name: 'Confirm',
+      component: Confirm,
+    }
   ],
 });

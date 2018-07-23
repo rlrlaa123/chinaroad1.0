@@ -32,7 +32,7 @@ export default {
     return {
       name: firebase.auth().currentUser.displayName,
       gender: null,
-      type: firebase.auth().currentUser.providerData[0].providerId,
+      registered: firebase.auth().currentUser.providerData[0].providerId,
       errors: {},
     };
   },
@@ -43,7 +43,7 @@ export default {
         email: firebase.auth().currentUser.email,
         name: this.name,
         gender: this.gender,
-        type: this.type,
+        registered: this.registered,
       };
       axios.post('snsregister', request).then((response) => {
         if (response.data === 'registered') {

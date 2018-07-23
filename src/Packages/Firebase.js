@@ -37,6 +37,9 @@ export default (Vue) => {
         alert(`Error: ${error}`);
       });
     },
+    currentUser() {
+      return firebase.auth().currentUser;
+    }
   };
   Object.defineProperties(Vue.prototype, {
     $firebaseAuth: {

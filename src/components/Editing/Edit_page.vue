@@ -41,7 +41,6 @@ export default {
   },
   methods: {
     showConfirm(id) {
-      console.log('hello');
       this.confirmShow = true;
       this.confirmId = id;
       this.toggle = 3;

@@ -112,7 +112,9 @@ export default {
             });
           } else {
             // eslint-disable-next-line
-            confirm('아직 질문이 등록되지 않았습니다.');
+            if (confirm('아직 질문이 등록되지 않았습니다.')) {
+              this.$store.commit('confirm');
+            }
           }
         });
       } else {
@@ -135,8 +137,12 @@ export default {
               this.showEdits[this.showEdits.length - 1].answers = response.data[i].reply;
               this.reply = '';
               if (this.edits.length === this.showEdits.length) {
-                // eslint-disable-next-line
-                confirm('오늘의 첨삭을 마쳤습니다.');
+                if (!this.$store.state.confirmed) {
+                  // eslint-disable-next-line
+                  if (confirm('오늘의 첨삭을 마쳤습니다.')) {
+                    this.$store.commit('confirm');
+                  }
+                }
               } else {
                 this.showEdits.push({
                   id: this.reply_index + 1,
@@ -163,10 +169,12 @@ export default {
       }
     },
     submitAnswer(reply, editIndex) {
+      const currentDate = new Date();
       const request = {
         email: this.$firebaseAuth.currentUser().email,
         edit_id: this.edits[editIndex].id,
         reply,
+        date: `${currentDate.getFullYear()}-${currentDate.getMonth()}-${currentDate.getDate()}`,
       };
       axios.post('sendReply/', request).then((response) => {
         // eslint-disable-next-line
@@ -177,7 +185,7 @@ export default {
       this.reply = '';
       if (this.edits.length === this.showEdits.length) {
         // eslint-disable-next-line
-        confirm('오늘의 첨삭을 마쳤습니다.');
+        confirm('오늘의 첨삭을 마쳤습니다.')
       } else {
         this.showEdits.push({
           id: this.reply_index + 1,

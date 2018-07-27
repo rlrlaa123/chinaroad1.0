@@ -16,44 +16,37 @@
           <div class="confirm-image">
             <img src="../../assets/chat.png">
           </div>
-          <span>{{ confirm.answer }}</span>
+          <span>{{ confirm.reply }}</span>
         </div>
       </div>
       <div class="confirm-contents confirm-reply">
         <div class="confirm-image">
           <img src="../../assets/normalchecked.png" style="width: 20px;">
         </div>
-        <span>{{ confirm.reply }}</span>
+        <span>{{ confirm.answer }}</span>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   props: ['confirmId'],
   components: {
   },
   data() {
     return {
-      date: '2017-07-23',
-      confirms: [
-        {
-          id: 1,
-          question_ch: '什么运动在韩国很受欢迎?',
-          question_ko: '한국에는 어떤 스포츠가 인기가 많니?',
-          answer: 'it\'s nice',
-          reply: '첨삭완료',
-        },
-        {
-          id: 2,
-          question_ch: '你去过棒球场吗？ 韩国棒球场怎么样？',
-          question_ko: '야구장에 가본적 있니? 한국 야구장은 어떠니?',
-          answer: 'what\'s up',
-          reply: '첨삭완료',
-        },
-      ],
+      date: this.confirmId,
+      confirms: [],
     };
+  },
+  mounted() {
+    axios.get(`confirm/${this.$firebaseAuth.currentUser().email}/${this.date}`, {
+    }).then((response) => {
+      this.confirms = response.data;
+    });
   },
   methods: {
     back() {

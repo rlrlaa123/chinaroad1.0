@@ -2,8 +2,8 @@
   <div>
     <headers></headers>
     <navigator naviName="회화" :toggle=toggle :menuName=menuName
-               @easy="toggle = true" @hard="toggle = false"></navigator>
-    <div class="content" v-show="toggle">
+               @easy="toggle = 1" @hard="toggle = 2"></navigator>
+    <div class="content" v-show="toggle === 1">
       <div v-for="category in easy_categories" v-bind:key="category.id">
           <div>
             <router-link :to="{ name: 'List', params: { categoryId: category.id }}">
@@ -14,7 +14,7 @@
           <p>{{ category.name }}</p>
       </div>
     </div>
-    <div class="content" v-show="!toggle">
+    <div class="content" v-show="toggle === 2">
       <div v-for="category in hard_categories" v-bind:key="category.id">
         <div>
           <router-link :to="{ name: 'List', params: { categoryId: category.id }}">
@@ -40,7 +40,7 @@ export default {
   },
   data() {
     return {
-      toggle: true,
+      toggle: 1,
       menuName: ['초급', '중급'],
       easy_categories: [],
       hard_categories: [],

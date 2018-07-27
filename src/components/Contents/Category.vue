@@ -2,7 +2,7 @@
   <div>
     <headers></headers>
     <navigator naviName="컨텐츠" :toggle=toggle :menuName=menuName
-               @easy="toggle = true" @hard="toggle = false" @open="showModal = true"></navigator>
+               @easy="toggle = 1" @hard="toggle = 2" @open="showModal = true"></navigator>
     <div class="contents-wrapper">
       <div class="contents-container" v-for="category in categories" v-bind:key="category.id">
         <router-link :to="{ name: 'Content', params: { contentId: category.id } }">
@@ -38,7 +38,7 @@ export default {
   data() {
     return {
       showModal: false,
-      toggle: true,
+      toggle: 1,
       menuName: ['초급', '중급'],
       categories: [],
     };

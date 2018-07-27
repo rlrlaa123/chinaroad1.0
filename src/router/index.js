@@ -16,6 +16,9 @@ import Home from '../components/Home';
 import Register from '../components/Login/Register';
 import SNSRegister from '../components/Login/SNSRegister';
 import SNSLogin from '../components/Login/SNSLogin';
+import Notice from '../components/Notice/index';
+import Inquiry from '../components/Inquiry/index';
+import FAQ from '../components/FAQ/index';
 
 Vue.use(Router);
 
@@ -102,6 +105,21 @@ export default new Router({
       path: '/confirm/:confirmId',
       name: 'Confirm',
       component: Confirm,
-    }
+    },
+    {
+      path: '/notice',
+      name: 'Notice',
+      component: Notice,
+    },
+    {
+      path: '/inquiry',
+      name: 'Inquiry',
+      component: Inquiry,
+    },
+    {
+      path: '/faq',
+      name: 'FAQ',
+      component: FAQ,
+    },
   ],
 });

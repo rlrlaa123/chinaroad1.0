@@ -3,7 +3,7 @@
     <div class="confirm-wrapper">
       <div class="confirm-container"
            v-for="confirm in confirms" v-bind:key="confirm.id"
-           @click="show(confirm.id)">
+           @click="show(confirm.date)">
           <div>
               <div class="confirm-date">{{ confirm.date }}</div>
               <div class="confirm-text">{{ confirm.total }}개 질문 중 {{ confirm.confirmed }}개 응답</div>
@@ -18,26 +18,19 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
-      confirms: [
-        {
-          id: 1,
-          date: '2017-07-23',
-          total: 2,
-          confirmed: 1,
-          checked: false,
-        },
-        {
-          id: 2,
-          date: '2017-07-22',
-          total: 2,
-          confirmed: 2,
-          checked: true,
-        },
-      ],
+      confirms: [],
     };
+  },
+  mounted() {
+    axios.get(`confirm/${this.$firebaseAuth.currentUser().email}`, {
+    }).then((response) => {
+      this.confirms = response.data;
+    });
   },
   methods: {
     show(id) {

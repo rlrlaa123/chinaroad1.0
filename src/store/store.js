@@ -10,11 +10,13 @@ export const store = new Vuex.Store({
     tut_step2: true,
     tut_step3: true,
     registerType: null,
+    confirmed: false,
   },
   mutations: {
     change_tut_step1: (state) => { state.tut_step1 = false; },
     change_tut_step2: (state) => { state.tut_step2 = false; },
     change_tut_step3: (state) => { state.tut_step3 = false; },
     setRegisterType: (state, payload) => { state.registerType = payload; },
+    confirm: (state) => { state.confirmed = true; },
   },
 });

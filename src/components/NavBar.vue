@@ -26,19 +26,25 @@
           <div style="text-align: center;">
             <img src="../assets/information.png">
           </div>
-          <span>공지사항</span>
+          <router-link :to="{ name: 'Notice' }">
+            <span>공지사항</span>
+          </router-link>
         </div>
         <div class="nav-list">
           <div style="text-align: center;">
             <img src="../assets/FAQ.png">
           </div>
-          <span>FAQ</span>
+          <router-link :to="{ name: 'FAQ' }">
+            <span>FAQ</span>
+          </router-link>
         </div>
         <div class="nav-list">
           <div style="text-align: center;">
             <img src="../assets/question.png">
           </div>
-          <span>문의하기</span>
+          <router-link :to="{ name: 'Inquiry' }">
+            <span>문의하기</span>
+          </router-link>
         </div>
         <div class="nav-list">
           <div style="text-align: center;">
@@ -145,6 +151,8 @@ export default {
   }
 
   .nav-list span {
+    display: flex;
+    justify-content: flex-start;
     text-align: left;
     margin-left: 20px;
     font-size: 18px;

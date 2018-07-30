@@ -16,8 +16,9 @@ import { store } from './store/store';
 import firebasePackage from './Packages/Firebase';
 
 Vue.config.productionTip = false;
-axios.defaults.baseURL = 'http://localhost:8005/api';
+// axios.defaults.baseURL = 'http://localhost:8005/api';
 // axios.defaults.baseURL = 'http://198.13.50.135:8005/api';
+axios.defaults.baseURL = 'https://codvice06.cafe24.com/api';
 
 Vue.use(VueCordova);
 Vue.use(firebasePackage);

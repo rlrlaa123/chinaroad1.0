@@ -3,12 +3,12 @@
     <headers :header-name="headerName"></headers>
     <div class="notice-wrapper">
       <div class="notice-container" v-for="notice in notices" v-bind:key="notice.id">
-        <h3 class="notice-title">주요공지</h3>
+        <h3 class="notice-title">{{ notice.title }}</h3>
         <div class="notice-contents">
-          <div class="notice-text">주요공지</div>
+          <div class="notice-text">{{ notice.contents }}</div>
           <div class="notice-info">
-            <span class="notice-created-at">2018-02-13</span>
-            <span class="notice-views">22 views</span>
+            <span class="notice-created-at">{{ notice.created_at }}</span>
+            <span class="notice-views">0 views</span>
           </div>
         </div>
       </div>
@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import InfiniteLoading from 'vue-infinite-loading';
 import Headers from '../../components/Header_back';
 
@@ -30,43 +31,37 @@ export default {
     return {
       headerName: '공지사항',
       notices: [
-        {
-          id: 1,
-        },
-        {
-          id: 2,
-        },
-        {
-          id: 3,
-        },
-        {
-          id: 4,
-        },
-        {
-          id: 5,
-        },
-        {
-          id: 6,
-        },
-        {
-          id: 7,
-        },
-        {
-          id: 8,
-        },
       ],
+      page: 1,
     };
+  },
+  mounted() {
+    axios.get('notice', {
+    }).then((response) => {
+      this.notices = response.data.data;
+    });
   },
   methods: {
     infiniteHandler($state) {
-      setTimeout(() => {
-        const temp = [];
-        for (let i = this.notices.length + 1; i <= this.notices.length + 10; i += 1) {
-          temp.push(i);
-        }
+      this.page += 1;
+      const temp = [];
+      axios.get(`notice?page=${this.page}`, {
+      }).then((response) => {
+        temp.push(response.data.data);
         this.notices = this.notices.concat(temp);
         $state.loaded();
-      }, 1000);
+      });
+
+      // $state.loaded();
+
+      // setTimeout(() => {
+      //   const temp = [];
+      //   for (let i = this.notices.length + 1; i <= this.notices.length + 10; i += 1) {
+      //     temp.push(i);
+      //   }
+      //   this.notices = this.notices.concat(temp);
+      //   $state.loaded();
+      // }, 1000);
     },
   },
 };

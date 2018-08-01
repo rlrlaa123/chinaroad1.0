@@ -7,6 +7,10 @@ import VueCordova from 'vue-cordova';
 import axios from 'axios';
 import firebase from 'firebase/app';
 
+import Vuetify from 'vuetify';
+import 'vuetify/dist/vuetify.min.css';
+import 'material-design-icons-iconfont/dist/material-design-icons.css';
+
 import App from './App';
 import router from './router';
 
@@ -16,12 +20,12 @@ import { store } from './store/store';
 import firebasePackage from './Packages/Firebase';
 
 Vue.config.productionTip = false;
-// axios.defaults.baseURL = 'http://localhost:8005/api';
-// axios.defaults.baseURL = 'http://198.13.50.135:8005/api';
-axios.defaults.baseURL = 'https://codvice06.cafe24.com/api';
+axios.defaults.baseURL = 'http://localhost:8005/api';
+// axios.defaults.baseURL = 'https://codvice06.cafe24.com/api';
 
 Vue.use(VueCordova);
 Vue.use(firebasePackage);
+Vue.use(Vuetify);
 
 // add cordova.js only if serving the app through file://
 // if (window.location.protocol === 'file:' || window.location.port === '8080') {

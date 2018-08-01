@@ -12,7 +12,7 @@
           </div>
         </div>
       </div>
-      <infinite-loading @infinite="infiniteHandler"></infinite-loading>
+      <infinite-loading @infinite="infiniteHandler" v-if="loading"></infinite-loading>
     </div>
   </div>
 </template>
@@ -30,38 +30,31 @@ export default {
   data() {
     return {
       headerName: '공지사항',
-      notices: [
-      ],
-      page: 1,
+      notices: [],
+      page: 0,
+      loading: true,
     };
   },
   mounted() {
-    axios.get('notice', {
-    }).then((response) => {
-      this.notices = response.data.data;
-    });
   },
   methods: {
     infiniteHandler($state) {
       this.page += 1;
-      const temp = [];
+
       axios.get(`notice?page=${this.page}`, {
       }).then((response) => {
-        temp.push(response.data.data);
-        this.notices = this.notices.concat(temp);
-        $state.loaded();
+        if (response.data.data.length !== 0) {
+          setTimeout(() => {
+            response.data.data.forEach((ele) => {
+              this.notices.push(ele);
+            });
+
+            $state.loaded();
+          }, 1000);
+        } else {
+          this.loading = false;
+        }
       });
-
-      // $state.loaded();
-
-      // setTimeout(() => {
-      //   const temp = [];
-      //   for (let i = this.notices.length + 1; i <= this.notices.length + 10; i += 1) {
-      //     temp.push(i);
-      //   }
-      //   this.notices = this.notices.concat(temp);
-      //   $state.loaded();
-      // }, 1000);
     },
   },
 };
